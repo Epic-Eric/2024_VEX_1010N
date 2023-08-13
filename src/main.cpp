@@ -51,6 +51,10 @@ std::shared_ptr<graphy::AsyncGrapher> grapher(new graphy::AsyncGrapher("Drivetra
 
 // When enters the program
 void initialize() {
+    Left.set_brake_modes(pros::E_MOTOR_BRAKE_COAST);
+    Right.set_brake_modes(pros::E_MOTOR_BRAKE_COAST);
+    Cata.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    Cata_Rotation.set_position(35999);
 	pros::lcd::initialize();
     robobo.robot_update(-40, 40, 1.57);
 
@@ -90,15 +94,33 @@ void opcontrol() {
 
     while(true){
         // ---------------- Drivetrain ---------------- //
-        double motorTurnVal = Master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)/(double)127*100; //convert to percentage
-        double motorForwardVal = Master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)/(double)127*100; //convert to percentage
+        double motorTurnVal = Controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)/(double)127*100; //convert to percentage
+        double motorForwardVal = Controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)/(double)127*100; //convert to percentage
         //Volts range: -12 --> 12, converts percentage to volts
         double motorTurnVolts = turnSensitivity*(motorTurnVal * 0.12);
         //Times forward volts by a percentage from how much you turn and how important the turn is to slowing down forward speed
         double motorForwardVolts = motorForwardVal * 0.12 * (1 - (std::abs(motorTurnVolts)/12 * turnImportance)); 
         Left.move_voltage ((motorForwardVolts - motorTurnVolts) * (double) 1000);
         Right.move_voltage ((motorForwardVolts + motorTurnVolts) * (double) 1000);
-        std::cout<<LeftFront.get_voltage()<<std::endl;
+        //std::cout<<LeftFront.get_voltage()<<std::endl;
+
+        // ---------------- Catapult ---------------- //
+        double stop_angle = 287; //stops at 290 from 0 at the highest point
+        double stall_speed = 70; //speed of catapult so it doesn't stop arm mid-shot
+        std::cout<<Cata_Rotation.get_position()/100.0<<std::endl;
+        if((Cata_Rotation.get_angle()/100.0)>stop_angle){
+            Cata.move_velocity(100);
+        }
+        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){ //single shot
+            Cata.move_velocity(stall_speed);
+            pros::delay(300);
+        }
+        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){ //rapid fire
+            
+        }
+        else{
+            Cata.brake();
+        }
         pros::delay(2);
   }
 }

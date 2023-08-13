@@ -5,27 +5,29 @@
 #include "pros/motors.h"
 #include "pros/motors.hpp"
 #include "pros/misc.hpp"
+#include "pros/rotation.hpp"
 
 // ---------------- Motors ---------------- //
-extern pros::Controller Master;
+extern pros::Controller Controller;
 extern pros::Motor LeftFront;
 extern pros::Motor LeftMiddle;
 extern pros::Motor LeftBack;
 extern pros::Motor RightFront;
 extern pros::Motor RightMiddle;
 extern pros::Motor RightBack;
-extern pros::Motor Shooter1;
-extern pros::Motor Shooter2;
+extern pros::Motor Intake;
+extern pros::Motor Cata;
 extern pros::MotorGroup Left;
 extern pros::MotorGroup Right;
-extern pros::MotorGroup Shooter;
 
 // ---------------- Sensors ---------------- //
-extern pros::ADIEncoder TW_left;
-extern pros::ADIEncoder TW_right;
+extern pros::ADIEncoder TW_front;
 extern pros::ADIEncoder TW_side;
-extern pros::ADIDigitalOut Indexer;
-extern pros::ADIDigitalIn Limit;
+extern pros::ADIDigitalOut Left_wing;
+extern pros::ADIDigitalOut Right_wing;
+extern pros::ADIDigitalOut Left_intake;
+extern pros::ADIDigitalOut Right_intake;
 extern pros::Imu Gyro;
+extern pros::Rotation Cata_Rotation;
 
 #endif /*sub_systems_hpp*/
