@@ -5,12 +5,12 @@
 
 // ---------------- Motors ---------------- //
 pros::Controller Controller(pros::E_CONTROLLER_MASTER);
-pros::Motor LeftFront(2, MOTOR_GEAR_BLUE);
-pros::Motor LeftMiddle(9, MOTOR_GEAR_BLUE);
-pros::Motor LeftBack(11, MOTOR_GEAR_BLUE);
-pros::Motor RightFront(20, MOTOR_GEAR_BLUE, true);
-pros::Motor RightMiddle(19, MOTOR_GEAR_BLUE, true);
-pros::Motor RightBack(17, MOTOR_GEAR_BLUE, true);
+pros::Motor LeftFront(2, MOTOR_GEAR_BLUE, true);
+pros::Motor LeftMiddle(9, MOTOR_GEAR_BLUE, true);
+pros::Motor LeftBack(11, MOTOR_GEAR_BLUE, true);
+pros::Motor RightFront(20, MOTOR_GEAR_BLUE);
+pros::Motor RightMiddle(19, MOTOR_GEAR_BLUE);
+pros::Motor RightBack(17, MOTOR_GEAR_BLUE);
 pros::Motor Intake(16, MOTOR_GEAR_BLUE);
 pros::Motor Cata(10, MOTOR_GEAR_RED, true);
 pros::MotorGroup Left ({LeftFront,LeftMiddle,LeftBack});

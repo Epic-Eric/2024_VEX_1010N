@@ -85,6 +85,8 @@ void autonomous() {
 
 // Driver control
 void opcontrol() {
+    //Global variables
+    bool rapid_fire=false;
         
     // ---------------- Drivetrain ---------------- //
     double turnImportance = 0.3; //How much turning slows down the speed of forward, 0 doesn't affect, 1 stops forward
@@ -100,27 +102,32 @@ void opcontrol() {
         double motorTurnVolts = turnSensitivity*(motorTurnVal * 0.12);
         //Times forward volts by a percentage from how much you turn and how important the turn is to slowing down forward speed
         double motorForwardVolts = motorForwardVal * 0.12 * (1 - (std::abs(motorTurnVolts)/12 * turnImportance)); 
-        Left.move_voltage ((motorForwardVolts - motorTurnVolts) * (double) 1000);
-        Right.move_voltage ((motorForwardVolts + motorTurnVolts) * (double) 1000);
-        //std::cout<<LeftFront.get_voltage()<<std::endl;
+        Left.move_voltage ((motorForwardVolts + motorTurnVolts) * (double) 1000);
+        Right.move_voltage ((motorForwardVolts - motorTurnVolts) * (double) 1000);
+        //std::cout<<LeftFront.get_actual_velocity()<<std::endl;
 
         // ---------------- Catapult ---------------- //
-        double stop_angle = 287; //stops at 290 from 0 at the highest point
-        double stall_speed = 70; //speed of catapult so it doesn't stop arm mid-shot
-        std::cout<<Cata_Rotation.get_position()/100.0<<std::endl;
-        if((Cata_Rotation.get_angle()/100.0)>stop_angle){
-            Cata.move_velocity(100);
+        //variables init
+        double top_ang = 80, range = 6; //degrees
+        double speed_lim = 400; //degrees/sec
+        double cata_ang = Cata_Rotation.get_angle()/100.0, cata_speed = Cata_Rotation.get_velocity();
+        bool single_shot = Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+            rapid_fire = (rapid_fire==true) ? rapid_fire = false : rapid_fire = true; //toggles
         }
-        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){ //single shot
-            Cata.move_velocity(stall_speed);
-            pros::delay(300);
-        }
-        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){ //rapid fire
-            
-        }
-        else{
+        
+        //process
+        if(cata_speed>speed_lim){ //too fast! need to wait till cata is back so no caught in mid-shot
             Cata.brake();
         }
+        else if(cata_ang<range&&cata_ang>0 || cata_ang<360&&cata_ang>360-range){ //if cata ang in range of dead stop
+            if(rapid_fire || single_shot) Cata.move_velocity(100);
+            else Cata.brake();
+        }
+        else if(cata_ang<top_ang && cata_ang>0){ //if between raised and dead limit
+            Cata.move_velocity(100); //always move down
+        }
+        std::cout<<cata_speed<<std::endl;
         pros::delay(2);
   }
 }
