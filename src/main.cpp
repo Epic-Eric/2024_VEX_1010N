@@ -70,7 +70,6 @@ void initialize() {
     //odom
     skills_odom();
     robobo.robot_update(-40,40,M_PI);
-    positionTracking();
 
     // Graphing
     grapher->addDataType("Desired Vel", COLOR_ORANGE);
@@ -102,6 +101,8 @@ void opcontrol() {
     Left_intake.set_value(1);
     Right_intake.set_value(1);
     pros::screen::set_pen(COLOR_BLUE);
+    bool rapid_fire = false;
+    bool cata_released = false;
         
     // ---------------- Drivetrain ---------------- //
     double turnImportance = 0.3; //How much turning slows down the speed of forward, 0 doesn't affect, 1 stops forward
@@ -123,20 +124,31 @@ void opcontrol() {
 
         // ---------------- Catapult ---------------- //
         //variables init
-        double top_ang = 80, range = 5; //degrees
+        double top_ang = 73, range = 5; //degrees
         double speed_lim = 500; //degrees/sec
         double cata_ang = Cata_Rotation.get_angle()/100.0, cata_speed = Cata_Rotation.get_velocity();
-        bool shot = Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+        bool shot = Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+        if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) rapid_fire = !rapid_fire; //toggles
         
         //process
-        if(cata_speed>speed_lim){ //too fast! need to wait till cata is back so no caught in mid-shot
+        if(rapid_fire){
+            if(cata_speed>speed_lim){ //too fast! need to wait till cata is back so no caught in mid-shot
+                Cata.brake();
+            }
+            else Cata.move_velocity(100);
+        }
+        else if(shot && (cata_ang<range&&cata_ang>0 || cata_ang<360&&cata_ang>360-range)){ //if cata ang in range of dead stop needs to shoot
+            Cata.move_velocity(100);
+            cata_released = true;
+        }
+        else if(cata_ang<range&&cata_ang>0 || cata_ang<360&&cata_ang>360-range){ //if cata ang in range of dead stop needs to stop
             Cata.brake();
         }
-        else if(cata_ang<range&&cata_ang>0 || cata_ang<360&&cata_ang>360-range){ //if cata ang in range of dead stop
-            if(shot) Cata.move_velocity(100);
-            else Cata.brake();
+        else if(cata_released && !(cata_ang>top_ang-range)){ //if it's shot but hasn't returned ?! (is it stuck?) motor doesn't spin
+            Cata.brake();
         }
-        else if(cata_ang<top_ang && cata_ang>0){ //if between raised and dead limit
+        else{ //if between raised and dead limit
+            cata_released = false;
             Cata.move_velocity(100); //always move down
         }
         std::cout<<cata_speed<<std::endl;
