@@ -1,8 +1,11 @@
 #include "main.h"
+#include "odom.hpp"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include "sub_systems.hpp"
+#include <cmath>
+#include <cstddef>
 #include <iostream>
 // ---------------- Stats ---------------- //
 std::vector<init_node> points1{
@@ -31,6 +34,12 @@ Control controller {
     Kv, Ka, Kp
 };
 
+// ---------------- Odom ---------------- //
+void skills_odom (){
+    
+}
+
+
 // ---------------- Graph ---------------- //
 // Create grapher
 std::shared_ptr<graphy::AsyncGrapher> grapher(new graphy::AsyncGrapher("Drivetrain target vs. actual velocity"));
@@ -51,14 +60,19 @@ std::shared_ptr<graphy::AsyncGrapher> grapher(new graphy::AsyncGrapher("Drivetra
 
 // When enters the program
 void initialize() {
-    Left.set_brake_modes(pros::E_MOTOR_BRAKE_COAST);
-    Right.set_brake_modes(pros::E_MOTOR_BRAKE_COAST);
-    Cata.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    Cata_Rotation.set_position(35999);
+    //devices
+    Left.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+    Right.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+    Cata.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    Intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	pros::lcd::initialize();
-    robobo.robot_update(-40, 40, 1.57);
 
-    // Add data types
+    //odom
+    skills_odom();
+    robobo.robot_update(-40,40,M_PI);
+    positionTracking();
+
+    // Graphing
     grapher->addDataType("Desired Vel", COLOR_ORANGE);
     grapher->addDataType("Actual Vel", COLOR_AQUAMARINE);
     grapher->startTask();
@@ -73,7 +87,6 @@ void disabled() {
 // After initialize, before auto when plugged in comp switch
 // For auto selector etc.
 void competition_initialize() {
-
 }
 
 
@@ -86,7 +99,9 @@ void autonomous() {
 // Driver control
 void opcontrol() {
     //Global variables
-    bool rapid_fire=false;
+    Left_intake.set_value(1);
+    Right_intake.set_value(1);
+    pros::screen::set_pen(COLOR_BLUE);
         
     // ---------------- Drivetrain ---------------- //
     double turnImportance = 0.3; //How much turning slows down the speed of forward, 0 doesn't affect, 1 stops forward
@@ -108,26 +123,53 @@ void opcontrol() {
 
         // ---------------- Catapult ---------------- //
         //variables init
-        double top_ang = 80, range = 6; //degrees
-        double speed_lim = 400; //degrees/sec
+        double top_ang = 80, range = 5; //degrees
+        double speed_lim = 500; //degrees/sec
         double cata_ang = Cata_Rotation.get_angle()/100.0, cata_speed = Cata_Rotation.get_velocity();
-        bool single_shot = Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
-        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
-            rapid_fire = (rapid_fire==true) ? rapid_fire = false : rapid_fire = true; //toggles
-        }
+        bool shot = Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
         
         //process
         if(cata_speed>speed_lim){ //too fast! need to wait till cata is back so no caught in mid-shot
             Cata.brake();
         }
         else if(cata_ang<range&&cata_ang>0 || cata_ang<360&&cata_ang>360-range){ //if cata ang in range of dead stop
-            if(rapid_fire || single_shot) Cata.move_velocity(100);
+            if(shot) Cata.move_velocity(100);
             else Cata.brake();
         }
         else if(cata_ang<top_ang && cata_ang>0){ //if between raised and dead limit
             Cata.move_velocity(100); //always move down
         }
         std::cout<<cata_speed<<std::endl;
-        pros::delay(2);
+
+        // ---------------- Intake ---------------- //
+        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+            Intake.move_voltage(12000);
+        }
+        else if (Controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+            Intake.move_voltage(-12000);
+        }
+        else Intake.brake();
+        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
+            Left_intake.set_value(true);
+            Right_intake.set_value(true);
+        }
+        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
+            Left_intake.set_value(false);
+            Right_intake.set_value(false);
+        }
+
+        // ---------------- Wings ---------------- //
+        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){
+            Left_wing.set_value(true);
+            Right_wing.set_value(true);
+        }
+        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
+            Left_wing.set_value(false);
+            Right_wing.set_value(false);
+        }
+
+        pros::screen::print(TEXT_MEDIUM, 3, "X: %lf, Y: %lf, ANG: %lf", xPosGlobal, yPosGlobal, Gyro.get_heading());
+
+    pros::delay(2);
   }
 }

@@ -18,10 +18,10 @@ pros::MotorGroup Right ({RightFront,RightMiddle,RightBack});
 
 // ---------------- Sensors ---------------- //
 pros::ADIEncoder TW_front ({7,'G', 'H'});
-pros::ADIEncoder TW_side ({7,'E', 'F'});;
-pros::ADIDigitalOut Left_wing('A');
-pros::ADIDigitalOut Right_wing('B');
-pros::ADIDigitalOut Left_intake('C');
-pros::ADIDigitalOut Right_intake('D');
+pros::ADIEncoder TW_side ({7,'E', 'F'});
+pros::ADIDigitalOut Left_wing({{7,'C'}});
+pros::ADIDigitalOut Right_wing('A');
+pros::ADIDigitalOut Left_intake({{7,'D'}});
+pros::ADIDigitalOut Right_intake('B');
 pros::Imu Gyro (8);
 pros::Rotation Cata_Rotation (1);

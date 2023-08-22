@@ -39,7 +39,7 @@
 /**
  * You should add more #includes here
  */
-//#include "okapi/api.hpp"
+#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
 #include "pure_pursuit/controller.hpp"
 #include "pure_pursuit/functions.hpp"
@@ -48,6 +48,7 @@
 #include <cstdio>
 #include "Graphy/Grapher.hpp"
 #include "sub_systems.hpp"
+#include "odom.hpp"
 
 
 /**

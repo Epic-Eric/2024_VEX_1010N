@@ -6,6 +6,7 @@
 #include "pros/motors.hpp"
 #include "pros/misc.hpp"
 #include "pros/rotation.hpp"
+#include "okapi/api.hpp"
 
 // ---------------- Motors ---------------- //
 extern pros::Controller Controller;
