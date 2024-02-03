@@ -11,7 +11,6 @@
 #define m_to_inch(meter) meter*39.3701;
 
 // ---------------- User functions ---------------- //
-// double prev_turn_table_tick;
 bool we_are_blue = false;
 double middle_ang = 40, down_ang = 58;
 bool skills_gps_deadzone(double x, double y){
@@ -323,7 +322,6 @@ void autonomous() {
 
 void opcontrol() {
     bool rapid_fire = false;
-    int cata_state = 0; //0 is default, 1 is blocking
     // ---------------- Drivetrain ---------------- //
     double turnImportance = 0.3; //How much turning slows down the speed of forward, 0 doesn't affect, 1 stops forward
     double turnSensitivity = 0.6; //How sensitive a turn is, 0 doesn't turn, 1 most sensitive
@@ -343,25 +341,11 @@ void opcontrol() {
         // ---------------- Catapult ---------------- //
         //variables init
         if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) rapid_fire = !rapid_fire;
-        if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)){ //moves cata to blocking pos
-            switch (cata_state) {
-                case 0: //in default
-                cata_state = 1;
-                break;
-
-                default: //already in blocking pos
-                cata_state = 0;
-                break;
-            }
-        }
 
         //Buttons
         if(rapid_fire) Cata.move_velocity(40);
         else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) Cata.move_velocity(55);
-        else{
-            if(cata_state == 0) set_cata(down_ang);
-            else if(cata_state == 1) set_cata(middle_ang);
-        }
+        else set_cata(down_ang);
 
         // ---------------- Intake ---------------- //
         if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
@@ -391,15 +375,18 @@ void opcontrol() {
         }
 
         // // ---------------- PTO ---------------- //
-        // if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
-        //     climb();
-        // }
+        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
+            PTO.set_value(1);
+        }
+        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
+            PTO.set_value(0);
+        }
 
         // ---------------- Blocker ---------------- //
         if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)){
             blocker_out();
         }
-        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
+        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
             blocker_in();
         }
         pros::delay(2);
