@@ -165,7 +165,7 @@ void match_near(){
     //come back diagonally
     chassis.moveTo(-54, -54, 45, 2000, false, false);
     //drive to deliver
-    chassis.moveTo(-6, -62, 90, 2000);
+    chassis.moveTo(-12, -62, 90, 2000);
     intake_in();
 }
 
@@ -317,7 +317,7 @@ void autonomous() {
 
     //skills();
 
-    match_far();
+    match_near();
 }
 
 void opcontrol() {
@@ -343,7 +343,7 @@ void opcontrol() {
         if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) rapid_fire = !rapid_fire;
 
         //Buttons
-        if(rapid_fire) Cata.move_velocity(40);
+        if(rapid_fire) Cata.move_velocity(55);
         else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) Cata.move_velocity(55);
         else set_cata(down_ang);
 
