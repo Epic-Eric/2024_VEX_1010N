@@ -12,6 +12,7 @@
 
 // ---------------- User functions ---------------- //
 bool we_are_blue = false;
+bool left_back_wing, right_back_wing = false; 
 double middle_ang = 40, down_ang = 58;
 bool skills_gps_deadzone(double x, double y){
     if(x< -58.5 || x>58.5 || y< -58.5 || y>58.5) return true; //a square of deadzone
@@ -49,19 +50,17 @@ void wings_in(){
     Left_wing.set_value(0);
     Right_wing.set_value(0);
 }
-void blocker_out(){
-    Left_blocker.set_value(1);
-    Right_blocker.set_value(1);
+void left_back_wing_out(){
+    Left_wing.set_value(1);
 }
-void blocker_in(){
-    Left_blocker.set_value(0);
-    Right_blocker.set_value(0);
+void left_back_wing_in(){
+    Left_wing.set_value(0);
 }
-void climb(){
-    PTO.set_value(true);
-    pros::delay(500);
-    Left.move_voltage(12000);
-    Right.move_voltage(12000);
+void right_back_wing_out(){
+    Right_wing.set_value(1);
+}
+void right_back_wing_in(){
+    Right_wing.set_value(0);
 }
 
 // ---------------- LemLib ---------------- //
@@ -356,39 +355,32 @@ void opcontrol() {
         }
         else Intake.brake();
         if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
-            Left_intake.set_value(true);
-            Right_intake.set_value(true);
+            intake_out();
         }
         else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
-            Left_intake.set_value(false);
-            Right_intake.set_value(false);
+            intake_in();
         }
 
         // ---------------- Wings ---------------- //
         if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){
-            Left_wing.set_value(true);
-            Right_wing.set_value(true);
+            wings_out();
         }
         else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
-            Left_wing.set_value(false);
-            Right_wing.set_value(false);
+            wings_in();
         }
 
-        // // ---------------- PTO ---------------- //
+        // ---------------- Back Wings ---------------- //
         if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
-            PTO.set_value(1);
+            if(right_back_wing)right_back_wing_in();
+            else right_back_wing_out();
+            right_back_wing = !right_back_wing; //toggle
         }
         else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
-            PTO.set_value(0);
+            if(left_back_wing)left_back_wing_in();
+            else left_back_wing_out();
+            left_back_wing = !left_back_wing; //toggle
         }
 
-        // ---------------- Blocker ---------------- //
-        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)){
-            blocker_out();
-        }
-        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
-            blocker_in();
-        }
         pros::delay(2);
   }
 }
