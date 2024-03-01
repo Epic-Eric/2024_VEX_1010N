@@ -34,6 +34,18 @@ void set_cata(double target){
     // pros::lcd::print(5, "target %lf", target); // print the cata target angle
 }
 
+void rage_mode(int dir, double time){
+    if(dir==0){ //forward
+        Left.move(12000);
+        Right.move(12000);
+    }
+    else{
+        Left.move(-12000);
+        Right.move(-12000);
+    }
+    pros::delay(time);
+}
+
 void intake_out(){
     Left_intake.set_value(1);
     Right_intake.set_value(1);
@@ -51,16 +63,16 @@ void wings_in(){
     Right_wing.set_value(0);
 }
 void left_back_wing_out(){
-    Left_wing.set_value(1);
+    Left_back_wing.set_value(1);
 }
 void left_back_wing_in(){
-    Left_wing.set_value(0);
+    Left_back_wing.set_value(0);
 }
 void right_back_wing_out(){
-    Right_wing.set_value(1);
+    Right_back_wing.set_value(1);
 }
 void right_back_wing_in(){
-    Right_wing.set_value(0);
+    Right_back_wing.set_value(0);
 }
 
 // ---------------- LemLib ---------------- //
@@ -70,7 +82,7 @@ lemlib::Drivetrain_t drivetrain {
     11.25, // track width
     3.25, // wheel diameter
     360, // wheel rpm
-	9 //chase power
+	12 //chase power
 };
 lemlib::TrackingWheel front_tracking_wheel(&TW_front, 2.75, -0.375);
 
@@ -85,13 +97,13 @@ lemlib::OdomSensors_t sensors {
 
 // forward/backward PID
 lemlib::ChassisController_t lateralController {
-    18, // kP //12, 14, 18, 23, 30
+    30, // kP //12, 14, 18, 23, 30
     42, // kD //4.5, 15.5, 42, 72, 126
     1, // smallErrorRange
     100, // smallErrorTimeout
     3, // largeErrorRange
     500, // largeErrorTimeout
-    5 // slew rate //5
+    7 // slew rate //5
 };
  
 // turning PID
@@ -100,7 +112,7 @@ lemlib::ChassisController_t angularController {
     35, // kD 24 26
     1, // smallErrorRange
     100, // smallErrorTimeout
-    3, // largeErrorRange
+    5, // largeErrorRange
     500, // largeErrorTimeout
     0 // slew rate
 };
@@ -210,26 +222,60 @@ void match_far(){
 }
 
 void skills(){
-    chassis.setPose(-50.8,-54.8,240.5);
-    //match load for 32 secs
-    Cata.move_velocity(45);
-    pros::delay(29000);//35000
+    chassis.setPose(-49,55,22);
+    //push 2 red balls
+    chassis.moveTo(-55, 25, 0, 1500,false,false, 20);
+    //move to match load
+    chassis.moveTo(-55, 43, 0, 1500);
+    chassis.turnTo(48, 10, 1500,false,true);
+    wings_out();
+    //match load for 25 secs
+    Cata.move_velocity(53);
+    pros::delay(2000);
     Cata.brake();
-    Intake.move_voltage(-12000);
-    //butt it in
-    chassis.moveTo(-60, -20, 0, 2000);
-    //come back
-    chassis.moveTo(-38, -58, 270, 2000,false,false);
-    intake_out();
-    //move to other field
-    chassis.moveTo(36, -58, 270, 5000,false,false);
-    //bend the corner
-    intake_in();
-    chassis.moveTo(37, -30, 180, 2000,false,false,0,0.6,80);
+    wings_in();
+    //get corner ball
+    chassis.moveTo(-22, 40, 270, 2000, false, false);
+    right_back_wing_out();
+    left_back_wing_out();
+    //sweeps
+    chassis.moveTo(-14, 24, 0, 2000, false, false);
+    //push balls over
+    chassis.moveTo(-16, -40, 20, 2000, false, false,20);
+    left_back_wing_in();
+    //bend the nook
+    chassis.turnTo(-62, -42, 1000,false,true);
+    chassis.moveTo(-66, -35, 90, 1000, false, false);
+    //get the corner ball
+    chassis.turnTo(-53, -53, 1000);
+    right_back_wing_out();
+    chassis.moveTo(-45, -59, 135, 2000);
+    chassis.turnTo(47, -57, 1000);
+    //get to other side
+    chassis.moveTo(-21, -58, 90, 2000);
+    chassis.moveTo(42, -58, 90, 2000);
+    chassis.moveTo(-38, -60, 270, 2000, false, false);
+    right_back_wing_out();
+    chassis.moveTo(-5, -60, 270, 2000, false, false);
+    right_back_wing_in();
+    chassis.moveTo(7, -60, 270, 2000, false, false);
+    right_back_wing_out();
+    chassis.moveTo(42, -60, 270, 2000, false, false);
+    //get ball in corner
+    chassis.moveTo(53, -53, 225, 2000, false, false);
+    left_back_wing_out();
+    right_back_wing_in();
+    //push from side #1
+    chassis.moveTo(59, -25, 180, 2000, false, false);
+    left_back_wing_in();
+    //back off
+    chassis.moveTo(59, -40, 180, 2000);
+    //turn to center
+    chassis.turnTo(11, -31, 100, false, true);
     //go inside the nook
-    chassis.moveTo(11, -31, 117, 2000,false,false,0,0.6,80);
+    chassis.moveTo(11, -29, 117, 2000,false,false);
     //go along the pipe to the middle
-    chassis.moveTo(5, -6, 180, 2000,false,false,0,0.6,127);
+    chassis.moveTo(5, -6, 180, 2000,false,false);
     //turn & push 1
     chassis.turnTo(70, 0, 1500,false,false,80);
     chassis.moveTo(72, 0, 90, 1500);
@@ -239,7 +285,7 @@ void skills(){
     chassis.moveTo(5, 30, 135, 2000, false,false);
     //push 2
     wings_out();
-    chassis.moveTo(48, 10, 90, 2000);
+    chassis.moveTo(48, 3, 90, 2000);
     //back out
     wings_in();
     chassis.moveTo(5, -6, 90, 2000, false,false);
@@ -256,15 +302,6 @@ void skills(){
     chassis.moveTo(72, 0, 90, 2000);
     //back out
     wings_in();
-    chassis.moveTo(59, -57, 270, 2000, false, false);
-    //back push 5
-    chassis.moveTo(57, -2, 180, 2000, false, false);
-    //backout
-    chassis.moveTo(45, -52, 180, 2000);
-    //back push 6
-    chassis.moveTo(63, -2, 180, 1000, false, false);
-    //backout
-    chassis.moveTo(63, -40, 180, 2000);
 }
 
 void initialize() {
@@ -309,14 +346,14 @@ void autonomous() {
     // follow the next path, but with the robot going backwards
     //chassis.follow("path2.txt", 2000, 15, true);
 
-    // chassis.moveTo(-49,-54, 5000);
-    // chassis.turnTo(-100,-100, 5000);
+    //chassis.moveTo(0, 30, 0, 2000);
+    //chassis.turnTo(30,0, 2000);
     
     //match_near();
 
-    //skills();
+    skills();
 
-    match_near();
+    //match_near();
 }
 
 void opcontrol() {
@@ -370,12 +407,12 @@ void opcontrol() {
         }
 
         // ---------------- Back Wings ---------------- //
-        if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
+        if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)){
             if(right_back_wing)right_back_wing_in();
             else right_back_wing_out();
             right_back_wing = !right_back_wing; //toggle
         }
-        else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
+        else if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)){
             if(left_back_wing)left_back_wing_in();
             else left_back_wing_out();
             left_back_wing = !left_back_wing; //toggle

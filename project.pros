@@ -335,7 +335,8 @@
     },
     "upload_options": {
       "slot": 1,
-      "icon": "robot"
+      "icon": "robot",
+      "after": "screen"
     }
   }
 }
