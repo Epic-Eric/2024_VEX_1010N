@@ -189,7 +189,7 @@ void match_far(){
     Intake.move_voltage(12000);
     pros::delay(500);
     wings_in();
-    chassis.moveTo(20, -7, 341.3, 2000);
+    chassis.moveTo(20, -7, 341.3, 2000);//-11,10,142
     pros::delay(500);
     //outake ball 1
     chassis.turnTo(47, -11, 2000);
@@ -224,73 +224,87 @@ void match_far(){
 void skills(){
     chassis.setPose(-50,55,24);
     //push 2 red balls
-    chassis.moveTo(-55, 25, 0, 1000,false,false, 20);
+    chassis.moveTo(-57, 25, 0, 1000,false,false, 20);
     //move to match load
-    chassis.moveTo(-55, 43, 0, 1500);
-    chassis.turnTo(48, 10, 500,false,true);
+    chassis.moveTo(-56, 44, 0, 1500);
+    chassis.moveTo(-56, 44, 285, 1000);
     wings_out();
     //match load for 25 secs
-    Cata.move_velocity(50);
-    pros::delay(25000);
+    Cata.move_velocity(52);
+    pros::delay(2000);
     Cata.brake();
     wings_in();
-    //get corner ball
-    chassis.moveTo(-21, 39, 270, 2000, false, false);
-    right_back_wing_out();
+    //head into the corridor
+    chassis.moveTo(-40, 55, 40, 1500);
+    //to other side
+    chassis.moveTo(43, 62, 100, 2000);
+    //crazy turning push! #1
+    chassis.moveTo(65, 23, 180, 1500, false, true, 20);
+    // //backoff for 2nd
+    // chassis.moveTo(63, 50, 180, 2000, false, false);
+    // //crazy side push! #2
+    // chassis.moveTo(63, 25, 180, 1000);
+    //turn and back comes to group balls diagonal
+    chassis.moveTo(35, 45, 0, 2000, false, false);
     left_back_wing_out();
-    //sweeps
-    chassis.moveTo(-14, 24, 0, 2000, false, false);
-    //push balls over
-    chassis.moveTo(-13, -40, 0, 2000, false, false,20);
+    //push balls closer to middle
+    chassis.moveTo(35, 25, 0, 2000, false, false);
+    chassis.moveTo(35, 32, 0, 2000);
+    //comes back against black barrier
     left_back_wing_in();
-    right_back_wing_in();
-    //bend the nook
-    chassis.turnTo(-62, -45, 500,false,true);
-    chassis.moveTo(-52, -37, 90, 2000, false, false);
-    chassis.turnTo(-40, -65, 1000);
-    left_back_wing_out();
-    right_back_wing_out();
-    //get to other side
-    chassis.moveTo(-44, -60, 135, 2000);
-    right_back_wing_in();
-    chassis.moveTo(-18, -63, 90, 2000);
-    chassis.moveTo(45, -63, 80, 2000);
-    //push from side #1
-    chassis.moveTo(65, -20, 0, 1000);
-    //back off from side
-    chassis.moveTo(62, -40, 0, 2000, false, false);
-    //push from side #2
-    rage_mode(0, 500);
+    chassis.moveTo(13, 24, 90, 2000, false, false);
+    //push #3!
+    chassis.moveTo(43, 14, 100, 1500, false, true, 20);
+    //come back against barrier
+    chassis.moveTo(13, 24, 90, 2000, false, false);
+    //turn towards middle
+    chassis.turnTo(11, 0, 1000);
+    //goes to middle
+    chassis.moveTo(11, 0, 180, 2000, false, true, 0, 0.6,70);
+    //turns to double push #4!
+    chassis.turnTo(48, 0, 1000);
+    wings_out();
+    chassis.moveTo(56, 0, 90, 2000);
+    chassis.moveTo(25, 0, 90, 2000, false, false);
+    chassis.moveTo(56, 0, 90, 2000);
     //back off
-    left_back_wing_in();
-    chassis.turnTo(36, -35, 1000);
-    chassis.moveTo(36, -35, 270, 2000);
+    wings_in();
+    chassis.moveTo(12, 9, 133, 2000, false, false);
+    //turns toward side
+    chassis.turnTo(11, -8, 1000);
+    chassis.moveTo(11, -8, 180, 1000);
+    //turns to push #5!
+    chassis.turnTo(48, -8, 1000);
+    wings_out();
+    chassis.moveTo(56, -8, 90, 2000);
+    //back off
+    chassis.moveTo(11, -8, 90, 2000, false, false);
+    wings_in();
+    //turns toward edge
+    chassis.turnTo(11, -31, 1000);
+    chassis.moveTo(11, -31, 180, 2000, false, true, 0, 0.6,70);
+    //turns toward middle
+    chassis.turnTo(23, -21, 1000);
+    wings_out();
+    chassis.moveTo(23, -21, 55, 2000);
+    //push #6!
+    chassis.turnTo(47, -7, 1000);
+    chassis.moveTo(62, -7, 90, 2000);
+    //back off
+    wings_in();
     right_back_wing_out();
-    //turn to center
-    chassis.moveTo(29, -18, 0, 2000);
-    wings_out();
-    //line up
-    chassis.moveTo(43, -5, 90, 2000);
-    //back up
-    chassis.moveTo(30, -5, 90, 2000, false, false);
+    chassis.moveTo(26, -29, 330, 2000, false, false);
+    chassis.moveTo(37, -44, 300, 2000, false, false);
     right_back_wing_in();
-    //turn & push #3
-    chassis.moveTo(60, -5, 90, 1000);
-    //back out
-    wings_in();
-    chassis.moveTo(20, -6, 90, 2000, false,false);
-    chassis.moveTo(8, 30, 180, 2000, false,false);
-    chassis.moveTo(8, 30, 135, 2000, false,false);
-    //push 5
-    wings_out();
-    chassis.moveTo(55, 0, 90, 2000);
-    //back out
-    wings_in();
-    chassis.moveTo(24, 17, 90, 2000, false,false);
-    //go to corner
-    chassis.moveTo(52, 53, 45, 2000);
-    //side push
-    chassis.moveTo(63, 25, 180, 2000);
+    //push #7!
+    chassis.moveTo(62, -23, 180, 2000, false, false);
+    //backoff for 2nd
+    chassis.moveTo(39, -58, 231, 2000);
+    right_back_wing_out();
+    //crazy side push! #8
+    chassis.moveTo(63, -23, 180, 2000, false, false);
+    //final backoff
+    chassis.moveTo(63, -50, 180, 2000);
 }
 
 void initialize() {
@@ -340,9 +354,9 @@ void autonomous() {
     
     //match_near();
 
-    skills();
+    //skills();
 
-    //match_near();
+    match_far();
 }
 
 void opcontrol() {
@@ -368,7 +382,7 @@ void opcontrol() {
         if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) rapid_fire = !rapid_fire;
 
         //Buttons
-        if(rapid_fire) Cata.move_velocity(55);
+        if(rapid_fire) Cata.move_velocity(52);
         else if(Controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) Cata.move_velocity(55);
         else set_cata(down_ang);
 
