@@ -157,27 +157,24 @@ void screen() {
 
 
 void match_near(){
-    chassis.setPose(-52.1,-56.6,242.2);
-    Intake.move_voltage(-12000);
+    chassis.setPose(46,55,168);
     //scoop
-    intake_out();
-    wings_out();
-    pros::delay(500);
-    wings_in();
-    chassis.turnTo(-3, -62,2000);
-    //butt it in
-    chassis.moveTo(-60, 0, 180, 2000, false, false);
-    //come back
-    chassis.moveTo(-29, -35, 0, 2000);
-    wings_out();
-    //push ball over
-    chassis.moveTo(-6, -11, 90, 2000);
-    wings_in();
-    //come back diagonally
-    chassis.moveTo(-54, -54, 45, 2000, false, false);
-    //drive to deliver
-    chassis.moveTo(-12, -62, 90, 2000);
-    intake_in();
+    left_back_wing_out();
+    chassis.turnTo(68, 25,2000);
+    left_back_wing_in();
+    //front it in
+    chassis.moveTo(61, 22, 180, 1500);
+    // //come back
+    // chassis.moveTo(-29, -35, 0, 2000);
+    // wings_out();
+    // //push ball over
+    // chassis.moveTo(-6, -11, 90, 2000);
+    // wings_in();
+    // //come back diagonally
+    // chassis.moveTo(-54, -54, 45, 2000, false, false);
+    // //drive to deliver
+    // chassis.moveTo(-12, -62, 90, 2000); //6 60 270
+    // intake_in();
 }
 
 void match_far(){
@@ -189,36 +186,38 @@ void match_far(){
     Intake.move_voltage(12000);
     pros::delay(500);
     wings_in();
-    chassis.moveTo(20, -7, 341.3, 2000);//-11,10,142
+    chassis.moveTo(12, -11, 317, 2000);
     pros::delay(500);
     //outake ball 1
-    chassis.turnTo(47, -11, 2000);
+    chassis.turnTo(47, -5, 2000);
     Intake.move_voltage(-12000);
-    pros::delay(500);
-    //get ball 2
-    chassis.turnTo(5, -1, 2000);
-    Intake.move_voltage(12000);
-    chassis.moveTo(10, -4, 285, 2000);
-    pros::delay(500);
-    //outake ball 2
-    chassis.turnTo(47, -11, 2000);
-    Intake.move_voltage(-12000);
-    pros::delay(500);
+    wings_out();
+    //score ball 1 and 2
+    chassis.moveTo(45, -5, 90, 1000);
     //get ball 3
+    wings_in();
+    chassis.moveTo(38, -7, 90, 2000, false, false);
     Intake.move_voltage(12000);
-    chassis.moveTo(7, -21, 220, 2000);
+    chassis.moveTo(13, -18, 230, 2000);
     pros::delay(500);
     //outake ball 3 + push w/ wings
     chassis.turnTo(47, -11, 2000);
     Intake.move_voltage(-12000);
     wings_out();
     intake_in();
-    chassis.moveTo(37, -6, 90, 1500);
+    chassis.moveTo(45, -6, 90, 1000);
     //come back
     wings_in();
     Intake.brake();
-    chassis.moveTo(44, -46, 225, 2000, false, false);
-    chassis.moveTo(60, -24, 180, 2000, false, false);
+    chassis.moveTo(44, -46, 300, 2000, false, false);
+    chassis.moveTo(56, -46, 270, 2000, false, false);
+    left_back_wing_out();
+    //get corner ball
+    chassis.turnTo(68, -20, 2000, false, true);
+    left_back_wing_in();
+    chassis.moveTo(63, -24, 180, 1000, false, false);
+    //leave
+    chassis.moveTo(63, -30, 180, 2000);
 }
 
 void skills(){
@@ -352,11 +351,11 @@ void autonomous() {
     //chassis.moveTo(0, 30, 0, 2000);
     //chassis.turnTo(30,0, 2000);
     
-    //match_near();
+    match_near();
 
     //skills();
 
-    match_far();
+    //match_far();
 }
 
 void opcontrol() {
