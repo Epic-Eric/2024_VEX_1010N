@@ -222,7 +222,7 @@ void match_far(){
 }
 
 void skills(){
-    chassis.setPose(-49,55,22);
+    chassis.setPose(-50,55,24);
     //push 2 red balls
     chassis.moveTo(-55, 25, 0, 1000,false,false, 20);
     //move to match load
@@ -230,8 +230,8 @@ void skills(){
     chassis.turnTo(48, 10, 500,false,true);
     wings_out();
     //match load for 25 secs
-    Cata.move_velocity(53);
-    pros::delay(2000);
+    Cata.move_velocity(50);
+    pros::delay(25000);
     Cata.brake();
     wings_in();
     //get corner ball
@@ -241,69 +241,56 @@ void skills(){
     //sweeps
     chassis.moveTo(-14, 24, 0, 2000, false, false);
     //push balls over
-    chassis.moveTo(-16, -40, 15, 2000, false, false,20);
+    chassis.moveTo(-13, -40, 0, 2000, false, false,20);
     left_back_wing_in();
     right_back_wing_in();
     //bend the nook
     chassis.turnTo(-62, -45, 500,false,true);
-    chassis.moveTo(-47, -43, 90, 2000, false, false);
-    //get the corner ball
+    chassis.moveTo(-52, -37, 90, 2000, false, false);
     chassis.turnTo(-40, -65, 1000);
-    chassis.moveTo(-45, -57, 135, 2000);
-    right_back_wing_out();
-    chassis.turnTo(47, -50, 1000);
-    right_back_wing_in();
     left_back_wing_out();
-    //get to other side
-    chassis.moveTo(-18, -63, 90, 2000);
-    chassis.moveTo(45, -63, 90, 2000);//42
-    //get ball in corner
-    chassis.turnTo(59, -47, 500);
-    chassis.moveTo(59, -47, 45, 2000);
     right_back_wing_out();
-    chassis.turnTo(55, -27, 800);
+    //get to other side
+    chassis.moveTo(-44, -60, 135, 2000);
     right_back_wing_in();
+    chassis.moveTo(-18, -63, 90, 2000);
+    chassis.moveTo(45, -63, 80, 2000);
     //push from side #1
-    chassis.turnTo(65, -26, 500);
-    chassis.moveTo(65, -11, 0, 1000);
+    chassis.moveTo(65, -20, 0, 1000);
     //back off from side
     chassis.moveTo(62, -40, 0, 2000, false, false);
     //push from side #2
-    rage_mode(0, 1000);
+    rage_mode(0, 500);
     //back off
-    chassis.moveTo(59, -40, 180, 2000);
+    left_back_wing_in();
+    chassis.turnTo(36, -35, 1000);
+    chassis.moveTo(36, -35, 270, 2000);
+    right_back_wing_out();
     //turn to center
-    chassis.turnTo(11, -31, 100, false, true);
-    //go inside the nook
-    chassis.moveTo(11, -29, 117, 2000,false,false);
-    //go along the pipe to the middle
-    chassis.moveTo(5, -6, 180, 2000,false,false);
-    //turn & push 1
-    chassis.turnTo(70, 0, 1500,false,false,80);
-    chassis.moveTo(72, 0, 90, 1500);
-    //back out
-    chassis.moveTo(5, -6, 90, 2000, false,false);
-    chassis.moveTo(5, 30, 180, 2000, false,false);
-    chassis.moveTo(5, 30, 135, 2000, false,false);
-    //push 2
+    chassis.moveTo(29, -18, 0, 2000);
     wings_out();
-    chassis.moveTo(48, 3, 90, 2000);
+    //line up
+    chassis.moveTo(43, -5, 90, 2000);
+    //back up
+    chassis.moveTo(30, -5, 90, 2000, false, false);
+    right_back_wing_in();
+    //turn & push #3
+    chassis.moveTo(60, -5, 90, 1000);
     //back out
     wings_in();
-    chassis.moveTo(5, -6, 90, 2000, false,false);
-    chassis.moveTo(5, -30, 0, 2000, false,false);
-    chassis.moveTo(5, -30, 45, 2000, false,false);
-    //push 3
+    chassis.moveTo(20, -6, 90, 2000, false,false);
+    chassis.moveTo(8, 30, 180, 2000, false,false);
+    chassis.moveTo(8, 30, 135, 2000, false,false);
+    //push 5
     wings_out();
-    chassis.moveTo(48, -4, 90, 2000);
+    chassis.moveTo(55, 0, 90, 2000);
     //back out
     wings_in();
-    chassis.moveTo(5, -6, 90, 2000, false,false);
-    //push 4 - remaining balls
-    wings_out();
-    chassis.moveTo(72, 0, 90, 2000);
-    //back out
-    wings_in();
+    chassis.moveTo(24, 17, 90, 2000, false,false);
+    //go to corner
+    chassis.moveTo(52, 53, 45, 2000);
+    //side push
+    chassis.moveTo(63, 25, 180, 2000);
 }
 
 void initialize() {
