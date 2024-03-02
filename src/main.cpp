@@ -12,8 +12,8 @@
 
 // ---------------- User functions ---------------- //
 bool we_are_blue = false;
-bool left_back_wing, right_back_wing = false; 
 double middle_ang = 40, down_ang = 58;
+bool right_back_wing_on, left_back_wing_on = false;
 bool skills_gps_deadzone(double x, double y){
     if(x< -58.5 || x>58.5 || y< -58.5 || y>58.5) return true; //a square of deadzone
     return false;
@@ -163,18 +163,12 @@ void match_near(){
     chassis.turnTo(68, 25,2000);
     left_back_wing_in();
     //front it in
-    chassis.moveTo(61, 22, 180, 1500);
-    // //come back
-    // chassis.moveTo(-29, -35, 0, 2000);
-    // wings_out();
-    // //push ball over
-    // chassis.moveTo(-6, -11, 90, 2000);
-    // wings_in();
-    // //come back diagonally
-    // chassis.moveTo(-54, -54, 45, 2000, false, false);
-    // //drive to deliver
-    // chassis.moveTo(-12, -62, 90, 2000); //6 60 270
-    // intake_in();
+    chassis.moveTo(61, 22, 180, 1200);
+    //come back
+    chassis.moveTo(46, 55, 168, 1500, false, false);
+    //drive to deliver
+    chassis.turnTo(8,60,1000);
+    chassis.moveTo(8, 60, 270, 1500);
 }
 
 void match_far(){
@@ -225,20 +219,25 @@ void skills(){
     //push 2 red balls
     chassis.moveTo(-57, 25, 0, 1000,false,false, 20);
     //move to match load
-    chassis.moveTo(-56, 44, 0, 1500);
-    chassis.moveTo(-56, 44, 285, 1000);
+    chassis.moveTo(-51, 44, 0, 1500);
+    chassis.moveTo(-51, 44, 297, 1000);
     wings_out();
     //match load for 25 secs
-    Cata.move_velocity(52);
-    pros::delay(2000);
+    Cata.move_velocity(53);
+    pros::delay(25000);
     Cata.brake();
     wings_in();
     //head into the corridor
     chassis.moveTo(-40, 55, 40, 1500);
     //to other side
-    chassis.moveTo(43, 62, 100, 2000);
+    chassis.moveTo(45, 63, 100, 2000);
+    right_back_wing_out();
     //crazy turning push! #1
-    chassis.moveTo(65, 23, 180, 1500, false, true, 20);
+    chassis.moveTo(64, 23, 180, 1500, false, true, 20);
+    right_back_wing_in();
+    // chassis.moveTo(63, 45, 180, 2000, false, false);
+    // chassis.moveTo(63, 23, 180, 1000, false, true, 20);
+//chassis.setPose(60,32,180);
     // //backoff for 2nd
     // chassis.moveTo(63, 50, 180, 2000, false, false);
     // //crazy side push! #2
@@ -251,59 +250,82 @@ void skills(){
     chassis.moveTo(35, 32, 0, 2000);
     //comes back against black barrier
     left_back_wing_in();
-    chassis.moveTo(13, 24, 90, 2000, false, false);
+    chassis.moveTo(13, 25, 75, 2000, false, false);
     //push #3!
-    chassis.moveTo(43, 14, 100, 1500, false, true, 20);
+    chassis.moveTo(50, 13, 100, 1500, false, true, 20);
     //come back against barrier
-    chassis.moveTo(13, 24, 90, 2000, false, false);
+    chassis.moveTo(10, 24, 90, 2000, false, false);
     //turn towards middle
-    chassis.turnTo(11, 0, 1000);
+    chassis.turnTo(10, 0, 800, false, true);
     //goes to middle
-    chassis.moveTo(11, 0, 180, 2000, false, true, 0, 0.6,70);
+    chassis.moveTo(10, 10, 0, 2000, false, false, 0, 0.6,70);
     //turns to double push #4!
-    chassis.turnTo(48, 0, 1000);
-    wings_out();
-    chassis.moveTo(56, 0, 90, 2000);
-    chassis.moveTo(25, 0, 90, 2000, false, false);
-    chassis.moveTo(56, 0, 90, 2000);
+    chassis.turnTo(48, 10, 1000, false, true);
+    right_back_wing_out();
+    chassis.moveTo(56, 10, 270, 1500, false, false, 20);
     //back off
-    wings_in();
-    chassis.moveTo(12, 9, 133, 2000, false, false);
+    right_back_wing_in();
+    chassis.moveTo(10, 8, 270, 2000);
     //turns toward side
-    chassis.turnTo(11, -8, 1000);
-    chassis.moveTo(11, -8, 180, 1000);
+    chassis.turnTo(10, -3, 1000);
+    chassis.moveTo(10, -3, 180, 2000);
     //turns to push #5!
-    chassis.turnTo(48, -8, 1000);
+    chassis.turnTo(48, -3, 1000);
     wings_out();
-    chassis.moveTo(56, -8, 90, 2000);
+    chassis.moveTo(56, -3, 90, 1500, false, true, 20);
     //back off
-    chassis.moveTo(11, -8, 90, 2000, false, false);
     wings_in();
+    chassis.moveTo(10, -3, 90, 2000, false, false);
     //turns toward edge
-    chassis.turnTo(11, -31, 1000);
-    chassis.moveTo(11, -31, 180, 2000, false, true, 0, 0.6,70);
+    chassis.turnTo(10, -36, 1000);
+    chassis.moveTo(10, -36, 180, 2000, false, true, 0, 0.6,70);
     //turns toward middle
     chassis.turnTo(23, -21, 1000);
     wings_out();
-    chassis.moveTo(23, -21, 55, 2000);
     //push #6!
-    chassis.turnTo(47, -7, 1000);
-    chassis.moveTo(62, -7, 90, 2000);
+    chassis.moveTo(62, -3, 90, 2000);
     //back off
     wings_in();
     right_back_wing_out();
-    chassis.moveTo(26, -29, 330, 2000, false, false);
+    //chassis.moveTo(26, -29, 330, 2000, false, false);
     chassis.moveTo(37, -44, 300, 2000, false, false);
     right_back_wing_in();
-    //push #7!
-    chassis.moveTo(62, -23, 180, 2000, false, false);
-    //backoff for 2nd
-    chassis.moveTo(39, -58, 231, 2000);
+    //move to position
+    chassis.moveTo(30,-62,270,2000);
     right_back_wing_out();
-    //crazy side push! #8
-    chassis.moveTo(63, -23, 180, 2000, false, false);
-    //final backoff
-    chassis.moveTo(63, -50, 180, 2000);
+    chassis.moveTo(40,-62,260,2000, false, false);
+    chassis.moveTo(63, -25, 180, 1200, false, false);
+    chassis.moveTo(60, -44, 180, 2000);
+    pros::delay(500);
+    rage_mode(1, 1000);
+    chassis.moveTo(63,-44, 180, 2000);
+    rage_mode(1, 1000);
+    chassis.moveTo(60,-40, 180, 2000);
+}
+
+void test_skills(){
+    chassis.setPose(30,-60,270);
+    right_back_wing_out();
+    chassis.moveTo(60, -25, 180, 2000, false, false);
+    right_back_wing_in();
+    chassis.moveTo(54, -53, 216, 2000);
+    chassis.moveTo(60, -25, 180, 1500, false, false);
+    chassis.moveTo(50, -53, 216, 2000);
+    chassis.moveTo(63, -25, 180, 1500, false, false);
+    chassis.moveTo(52, -53, 216, 2000);
+}
+
+void test_skills2(){
+    chassis.setPose(30,-60,270);
+    right_back_wing_out();
+    chassis.moveTo(60, -25, 180, 1200, false, false);
+    chassis.moveTo(60, -40, 180, 2000);
+    rage_mode(1, 1000);
+    chassis.moveTo(63,-40, 180, 2000);
+    rage_mode(1, 1000);
+    chassis.moveTo(62,-40, 180, 2000);
+    rage_mode(1, 1000);
+    chassis.moveTo(60,-40, 180, 2000);
 }
 
 void initialize() {
@@ -351,14 +373,26 @@ void autonomous() {
     //chassis.moveTo(0, 30, 0, 2000);
     //chassis.turnTo(30,0, 2000);
     
-    match_near();
+    //match_near();
 
-    //skills();
+    skills();
 
     //match_far();
 }
 
 void opcontrol() {
+    // chassis.setPose(-50,55,24);
+    // //push 2 red balls
+    // chassis.moveTo(-57, 25, 0, 1000,false,false, 20);
+    // //move to match load
+    // chassis.moveTo(-52, 44, 0, 1500);
+    // chassis.moveTo(-52, 44, 293, 1000);
+    // wings_out();
+    // //match load for 25 secs
+    // Cata.move_velocity(53);
+    // pros::delay(25000);
+    // Cata.brake();
+    // wings_in();
     bool rapid_fire = false;
     // ---------------- Drivetrain ---------------- //
     double turnImportance = 0.3; //How much turning slows down the speed of forward, 0 doesn't affect, 1 stops forward
@@ -410,14 +444,14 @@ void opcontrol() {
 
         // ---------------- Back Wings ---------------- //
         if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)){
-            if(right_back_wing)right_back_wing_in();
-            else right_back_wing_out();
-            right_back_wing = !right_back_wing; //toggle
+            if(right_back_wing_on==false) right_back_wing_out();
+            else right_back_wing_in();
+            right_back_wing_on=!right_back_wing_on;
         }
-        else if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)){
-            if(left_back_wing)left_back_wing_in();
-            else left_back_wing_out();
-            left_back_wing = !left_back_wing; //toggle
+        if(Controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)){
+            if(left_back_wing_on==false) left_back_wing_out();
+            else left_back_wing_in();
+            left_back_wing_on=!left_back_wing_on;
         }
 
         pros::delay(2);
